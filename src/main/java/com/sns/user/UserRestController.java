@@ -3,6 +3,8 @@ package com.sns.user;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +21,8 @@ public class UserRestController {
 
 	@Autowired
 	private UserBO userBO;
-
 	/**
-	 * 로그인 아이디 중복확인 API
+	 * 아이디 중복확인 API
 	 * 
 	 * @param loginId
 	 * @return
@@ -29,49 +30,85 @@ public class UserRestController {
 	@RequestMapping("/is-duplicated-id")
 	public Map<String, Object> isDuplicatedId(
 			@RequestParam("loginId") String loginId) {
-
-		// db조회
-		UserEntity user = userBO.getUserEntityByLoginId(loginId);
-
-		// 응답값 만들고 리턴 -> json
 		Map<String, Object> result = new HashMap<>();
+		result.put("isDuplicatedId", false);
+		// select
+		UserEntity userEntity = userBO.getUserEntityByLoginId(loginId);
 		result.put("code", 200);
-
-		if (user == null) {
-			// 중복 아님
-			result.put("isDuplicated", false);
-		} else {
-			// 중복
-			result.put("isDuplicated", true);
-
+		if (userEntity != null) {
+			result.put("isDuplicatedId", true);
 		}
 		return result;
 	}
-
+	/**
+	 * 회원가입 API
+	 * 
+	 * @param loginId
+	 * @param password
+	 * @param name
+	 * @param email
+	 * @return
+	 */
 	@PostMapping("/sign-up")
 	public Map<String, Object> signUp(
 			@RequestParam("loginId") String loginId,
 			@RequestParam("password") String password, 
 			@RequestParam("name") String name,
 			@RequestParam("email") String email) {
-
-		// password 암호화 = 해싱(한번 만들어지면 다시 복구가 안되는 것) => 많은 알고리즘들 중에 md5 알고리즘으로 해볼 것
-		// aaaa => 74b8733745420d4d33f80c4663dc5e5
+		
+		// 비밀번호 해싱
 		String hashedPassword = EncryptUtils.md5(password);
-
+		
 		// db insert
-		Integer id = userBO.addUser(loginId, hashedPassword, name, email);
-
-		// 응답값
+		Integer userId = userBO.addUser(loginId, hashedPassword, name, email);
 		Map<String, Object> result = new HashMap<>();
-		if (id == null) {
-			result.put("code", 500);
-			result.put("errorMessage", "회원가입하는데 실패했습니다.");
-		} else {
+		if (userId != null) {
+			// 응답
 			result.put("code", 200);
 			result.put("result", "성공");
+		} else {
+			result.put("code", 500);
+			result.put("errorMessage", "회원가입에 실패했습니다.");
 		}
 
-		return result; // json
+		return result;
+	}
+
+	
+	/**
+	 * 로그인 API
+	 * @param loginId
+	 * @param password
+	 * @param session
+	 * @return
+	 */
+	@PostMapping("/sign-in")
+	public Map<String, Object> signIn(
+			@RequestParam("loginId") String loginId,
+			@RequestParam("password") String password, 
+			HttpSession session) {
+
+		// password hashing
+		String hashedPassword = EncryptUtils.md5(password);
+
+		// loginId, hashedPassword로 UserEntity => null or 채워져있음
+		UserEntity userEntity = userBO.getUserEntityByLoginIdPassword(loginId, hashedPassword);
+
+		Map<String, Object> result = new HashMap<>();
+		if (userEntity != null) {
+			// 로그인 처리
+			session.setAttribute("userId", userEntity.getId());
+			session.setAttribute("userLoginId", userEntity.getLoginId());
+			session.setAttribute("userName", userEntity.getName());
+
+			result.put("code", 200);
+			result.put("result", "성공");
+		} else {
+			// 로그인 불가
+			result.put("code", 500);
+			result.put("errorMessage", "존재하지 않는 사용자입니다.");
+		}
+
+		return result;
 	}
 }
