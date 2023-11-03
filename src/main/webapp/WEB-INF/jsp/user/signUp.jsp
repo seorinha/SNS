@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	
 <div class="d-flex justify-content-center">
 	<div class="sign-up-box">
 		<h1 class="m-4 font-weight-bold">회원가입</h1>
@@ -74,8 +75,8 @@ ${document}.ready(function() {
 		$.ajax({
 			//request
 			//type이 get이면 생략가능
-			url:"/user/is-duplicated-id"
-			, data:{"loginId":loginId}
+			url: "/user/is-duplicated-id"
+			, data: {"loginId":loginId}
 		
 			//response
 			, success: function(data) {
@@ -93,7 +94,7 @@ ${document}.ready(function() {
 	});
 	
 	//회원가입 submit, form태그로 이벤트를 잡는 방법
-	$('#signUpForm').on('submit', function(e){
+	$('#signUpForm').on('submit', function(e) {
 		e.preventDefault();  //서브밋 기능 막음
 		//alert("click");
 		

@@ -38,6 +38,9 @@ public class UserEntity {
 	private String name;
 
 	private String email;
+	
+	@Column(name = "ProfileImageUrl")
+	private String ProfileImageUrl;
 
 	@UpdateTimestamp
 	@Column(name = "createdAt", updatable = false)
