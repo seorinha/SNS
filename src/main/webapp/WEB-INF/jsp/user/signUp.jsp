@@ -6,9 +6,8 @@
 		<form id="signUpForm" method="post" action="/user/sign-up">
 		
 			<span class="sign-up-subject">ID</span>
-			<div class="d-flex ml-3 mt-3"> <%--중복확인 버튼 옆에 붙이기 위해 --%>
-				<input type="text" id="loginId" name="loginId"
-					class="form-control col-6" placeholder="ID를 입력하세요">
+			<div class="d-flex ml-3 mt-3"> <%--중복확인 버튼 옆에 붙이기 위해 div만든다--%>
+				<input type="text" id="loginId" name="loginId" class="form-control col-6" placeholder="ID를 입력하세요">
 				<button type="button" id="loginIdCheckBtn" class="btn btn-success">중복확인</button>
 			</div>
 
@@ -58,11 +57,12 @@
 ${document}.ready(function() {
 	//중복버튼 
 	$('#loginIdCheckBtn').on('click', function() {
-		alert("중복확인");
+		//alert("중복확인");
+		
 		//경고문구 초기화
-		$('#idCheckLength').addClass("d-none");
-		$('#idCheckDuplicated').addClass("d-none");
-		$('#idCheckOk').addClass("d-none");
+		$('#idCheckLength').addClass('d-none');
+		$('#idCheckDuplicated').addClass('d-none');
+		$('#idCheckOk').addClass('d-none');
 		
 		let loginId = $('#loginId').val().trim();
 		if (loginId.length < 4) {
@@ -78,15 +78,15 @@ ${document}.ready(function() {
 			, data:{"loginId":loginId}
 		
 			//response
-			, success:function(data) {
+			, success: function(data) {
 				//{"code":200, "isDuplicated":true} 중복은 true
-				if (data.isDuplicated) {//중복
+				if (data.isDuplicatedId) {//중복
 					$('#idCheckDuplicated').removeClass('d-none');
 				} else { //중복아님 => 사용가능
 					$('#idCheckOk').removeClass('d-none');
 				}
 			}
-			, error:function(request, status, error) {
+			, error: function(request, status, error) {
 				alert("중복확인에 실패했습니다.");
 			}
 		});
@@ -95,21 +95,21 @@ ${document}.ready(function() {
 	//회원가입 submit, form태그로 이벤트를 잡는 방법
 	$('#signUpForm').on('submit', function(e){
 		e.preventDefault();  //서브밋 기능 막음
-		
 		//alert("click");
+		
 		//validation 
-		let loginId = $('#loginId').val().trim();
-		let password = $('#password').val();
-		let comfirmPassword = $('#confirmPassword').val();
-		let name = $('#name').val().trim();
-		let email = $('#email').val().trim();
+		let loginId = $('input[name=loginId]').val().trim();
+		let password = $("input[name=password]").val();
+		let confirmPassword = $('input[name=confirmPassword]').val();
+		let name = $('input[name=name]').val().trim();
+		let email = $('input[name=email]').val().trim();
 		
 		if (loginId == '') {
 			alert("아이디를 입력하세요");
 			return false;
 		}
 		
-		if (!password | !confirmPassword) {
+		if (!password || !confirmPassword) {
 			alert("비밀번호를 입력하세요");
 			return false;
 		}
@@ -128,6 +128,7 @@ ${document}.ready(function() {
 			alert("이메일을 입력하세요.");
 			return false;
 		}
+		
 		
 		//중복확인 후 사용가능한지 확인 -> idCheckOk가 d-none이 있을 때 alert을 띄운다
 		if ($('#idCheckOk').hasClass('d-none')) {

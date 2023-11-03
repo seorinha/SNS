@@ -21,6 +21,8 @@ public class UserRestController {
 
 	@Autowired
 	private UserBO userBO;
+	
+	
 	/**
 	 * 아이디 중복확인 API
 	 * 
@@ -30,16 +32,22 @@ public class UserRestController {
 	@RequestMapping("/is-duplicated-id")
 	public Map<String, Object> isDuplicatedId(
 			@RequestParam("loginId") String loginId) {
+		
 		Map<String, Object> result = new HashMap<>();
 		result.put("isDuplicatedId", false);
+		
 		// select
 		UserEntity userEntity = userBO.getUserEntityByLoginId(loginId);
 		result.put("code", 200);
+		
 		if (userEntity != null) {
 			result.put("isDuplicatedId", true);
 		}
+		
 		return result;
 	}
+	
+	
 	/**
 	 * 회원가입 API
 	 * 
@@ -61,6 +69,7 @@ public class UserRestController {
 		
 		// db insert
 		Integer userId = userBO.addUser(loginId, hashedPassword, name, email);
+		
 		Map<String, Object> result = new HashMap<>();
 		if (userId != null) {
 			// 응답
