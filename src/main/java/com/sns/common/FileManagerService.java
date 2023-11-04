@@ -14,10 +14,10 @@ public class FileManagerService {
 
 	//실제 업로드가 된 이미지가 저장 될 경로(서버 주소)
 	//학원 경로
-	public static final String FILE_UPLOAD_PATH = "D:\\하서린\\5_spring_project\\SNS\\workspace\\images/";
+	//public static final String FILE_UPLOAD_PATH = "D:\\하서린\\5_spring_project\\SNS\\workspace\\images/";
 	
 	//집 경로
-	
+	public static final String FILE_UPLOAD_PATH = "C:\\Users\\ASUS\\Desktop\\웹개발\\5_spring_project\\SNS\\workspace\\images/";
 	
 	
 	//input: userLoginId, file(이미지)

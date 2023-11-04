@@ -28,14 +28,14 @@ public class PostRestController {
 				@RequestParam("file") MultipartFile file,
 				HttpSession session) {
 			
-			Integer userId = (Integer) session.getAttribute("userId");
+			Integer userId = (Integer)session.getAttribute("userId");
 			String userLoginId = (String)session.getAttribute("userLoginId");
 			
 			
 			//응답값
 			Map<String, Object> result = new HashMap<>();
 			if (userId == null) {
-				result.put("code", 500);
+				result.put("code", 500); //비로그인
 				result.put("result", "error");
 				result.put("errorMessage", "로그인을 해주세요");
 				
