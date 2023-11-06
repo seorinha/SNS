@@ -12,6 +12,11 @@ public class UserBO {
 	@Autowired
 	private UserRepository userRepository;
 	
+	//댓글뿌리기
+	private UserEntity getUserEntityById(int userId) {
+		return userRepository.findById(userId).orElse(null);
+	}
+	
 	//아이디 중복확인
 	public UserEntity getUserEntityByLoginId(String loginId) {
 		return userRepository.findByLoginId(loginId);
