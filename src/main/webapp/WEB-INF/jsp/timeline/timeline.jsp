@@ -47,7 +47,11 @@
 				
 				<%-- 좋아요 --%>
 				<div class="card-like m-3">
-					<a href="#" class="like-btn">
+					<a href="#" class="like-btn" data-post-id="${card.post.id}">
+						<img src="https://www.iconninja.com/files/214/518/441/heart-icon.png" width="18" height="18" alt="filled heart">
+					</a>
+					
+					<a href="#" class="like-btn" data-post-id="${card.post.id}">
 						<img src="https://www.iconninja.com/files/214/518/441/heart-icon.png" width="18" height="18" alt="filled heart">
 					</a>
 					좋아요 11개
@@ -66,17 +70,21 @@
 				
 				<%-- 댓글 목록 --%>
 				<div class="card-comment-list m-2">
-					
+					<c:forEach items="${card.commentList}" var="commentView">
 					<%-- 댓글 내용들 --%>
 					<div class="card-comment m-1">
-						<span class="font-weight-bold">댓글쓴이</span>
-						<span>댓글 내용</span>
+						<span class="font-weight-bold">${commentView.user.loginId}</span>
+						<span>${commentView.comment.content}</span>
 						
 						<%-- 댓글 삭제 버튼 --%>
-						<a href="#" class="comment-del-btn">
+						<%--로그인 된 사람과 댓글쓴이가 일치할 때 삭제버튼 노출 --%>
+						<c:if test="${userId eq commentView.user.id}">
+						<a href="#" class="comment-del-btn" data-comment-id="${commentView.comment.id}">
 							<img src="https://www.iconninja.com/files/603/22/506/x-icon.png" width="10" height="10">
 						</a>
+						</c:if>
 					</div>
+					</c:forEach>
 					
 					<%-- 댓글 쓰기 --%>
 					<div class="comment-write d-flex border-top mt-2">
@@ -205,5 +213,62 @@ $(document).ready(function() {
 		});
 	});
 	
+	//댓글 삭제
+	$('.comment-del-btn').on('click', function(e) {
+		//alert("댓글 삭제 클릭");
+		e.preventDefault(); //a태그의 위로 올라가는 현상 방지
+		
+		let commentId = $(this).data("comment-id");
+		alert(commentId);
+		
+		
+		$.ajax({
+			//request
+			type:"DELETE"
+			, url:"/comment/delete"
+			, data:{"commentId":commentId}
+		
+			//response
+			, success: function(data) {
+				if (data.code == 200) {
+					location.reload(true);
+				} else {
+					alert(data.errorMessage);
+				}
+			}
+			, error: function(request, status, error) {
+				alert("댓글 삭제에 실패햇습니다");
+			}
+		});
+		
+	});
+	
+
+	//좋아요 해제
+	$('.like-btn').on('click', function() {
+		e.preventDefault();
+		
+		let postId = $(this).data("post-id");
+		
+		$.ajax({
+			//request
+			type:"get" //get은 생략가능
+			, url:"/like/" + postId
+			//data를 추가할 필요 없음
+			
+			//response
+			, success:function(data) {
+				if (data.code == 200) {
+					location.reload(true); //새로고침 -> timeline다시 가져옴 -> 하트 채워지거나 비워지거나
+				} else if (data.code == 500) { //비로그인 상태
+					alert("로그인을 해주세요");
+				}
+			}
+		
+			, error:function(request, status, error) {
+				alert("좋아요 누르기에 실패했습니다");
+			}
+		});
+	});
 });
 </script>

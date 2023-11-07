@@ -58,4 +58,12 @@ public class CommentBO {
 		return commentViewList;
 	}
 	
+	//댓글 삭제하기
+	//input: 삭제할 댓글 번호
+	//output:x
+	public void deleteCommentById(int id) {
+		commentMapper.deleteCommentById(id);
+	}
+	
+	
 }
