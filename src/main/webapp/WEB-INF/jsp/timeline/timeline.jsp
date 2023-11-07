@@ -33,7 +33,7 @@
 			<div class="card border rounded mt-3">
 				<%-- 글쓴이, 더보기(삭제) --%>
 				<div class="p-2 d-flex justify-content-between">
-					<span class="font-weight-bold">${post.userId}</span>
+					<span class="font-weight-bold">${card.user.loginId}</span>
 					
 					<a href="#" class="more-btn">
 						<img src="https://www.iconninja.com/files/860/824/939/more-icon.png" width="30">
@@ -55,8 +55,8 @@
 				
 				<%-- 글 --%>
 				<div class="card-post m-3">
-					<span class="font-weight-bold">${post.userId}</span>
-					<span>${post.content}</span>
+					<span class="font-weight-bold">${card.user.loginId}</span>
+					<span>${card.post.content}</span>
 				</div>
 				
 				<%-- 댓글 제목 --%>
@@ -66,8 +66,7 @@
 				
 				<%-- 댓글 목록 --%>
 				<div class="card-comment-list m-2">
-				<c:forEach items="">
-					<c:if>
+					
 					<%-- 댓글 내용들 --%>
 					<div class="card-comment m-1">
 						<span class="font-weight-bold">댓글쓴이</span>
@@ -77,14 +76,12 @@
 						<a href="#" class="comment-del-btn">
 							<img src="https://www.iconninja.com/files/603/22/506/x-icon.png" width="10" height="10">
 						</a>
-					</c:if>
-					</c:forEach>
 					</div>
 					
 					<%-- 댓글 쓰기 --%>
 					<div class="comment-write d-flex border-top mt-2">
 						<input type="text" class="form-control border-0 mr-2 comment-input" placeholder="댓글 달기"/> 
-						<button type="button" class="comment-btn btn btn-light" data-post-id="${post.id}">게시</button>
+						<button type="button" class="comment-btn btn btn-light" data-post-id="${card.post.id}">게시</button>
 					</div>
 				</div> <%--// 댓글 목록 끝 --%>
 			</div> <%--// 카드1 끝 --%>
@@ -173,36 +170,38 @@ $(document).ready(function() {
 		});  // --- ajax 끝
 	});
 	
-	//댓글 쓰기
+	// 댓글 쓰기
 	$('.comment-btn').on('click', function() {
+		//alert("aaaaa");
 		let postId = $(this).data('post-id'); // data-post-id=13
+		//alert(postId);
 		
 		// 댓글 내용 가져오기
-		// 1. 
-		//let content = $(this).siblings("input").val().trim(); //siglings : 형제들을 가져오는 함수
-		//alert("content");
+		// 1)
+		//let content = $(this).siblings("input").val().trim(); //siblings :형제들의 태그를 가져온다 
 		
-		// 2.
+		// 2)
 		let content = $(this).prev().val().trim();
-		alert("content");
+		//alert(content);
 		
-		
-		//ajax 호출 
+		// ajax
 		$.ajax({
 			type:"post"
 			, url:"/comment/create"
 			, data:{"postId":postId, "content":content}
 		
-		, success:function(data) {
-			if () {
-				
-			} else {
-				
+			, success: function(data) {
+				if (data.code == 200) {
+					alert("성공");
+					location.reload(true);
+				} else if (data.code == 500) {
+					alert(data.errorMessage);
+					location.href = "/user/sign-in-view";
+				}
 			}
-			
-			, error:function(request, status, error)
-				alert("");
-		}
+			, error: function(request, status, error) {
+				alert("댓글 쓰기 실패했습니다.");
+			}
 		});
 	});
 	

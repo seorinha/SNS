@@ -3,11 +3,10 @@ package com.sns.comment.bo;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.stream.events.Comment;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sns.comment.domain.Comment;
 import com.sns.comment.domain.CommentView;
 import com.sns.comment.mapper.CommentMapper;
 import com.sns.user.bo.UserBO;
@@ -20,7 +19,9 @@ public class CommentBO {
 	private CommentMapper commentMapper;
 	
 	@Autowired
-	private UserBO userBO;
+	private UserBO userBO; 
+	//userRepository 부를 수 없다, bo는 남의 것을 부를때는 bo만 불러야한다
+	//postbo는 postRepository만 부를 수 있고 userBO는 userRepository만 부를 수 있다
 	
 	//댓글작성
 	//input: postId, userId, content
@@ -29,29 +30,32 @@ public class CommentBO {
 		commentMapper.insertComment(postId, userId, content);
 	}
 
-	//input: 글 번호
+	
+	//input:글 번호
 	//output: List<CommentView>
-	public List<CommentView> generateCommentViewListByPostId(int postId);
-		List<CommentView> commentView = new ArrayList<>();
+	public List<CommentView> generateCommentViewListByPostId(int postId) {
 		
-		//글에 해당하는 댓글들 목록 가져오기ㅣ List<Comment>
-		List<Comment> commentList = commentMapper.selectCommentListByPost
+		List<CommentView> commentViewList = new ArrayList<>();  //[] 비어잇음
+		
+		//글에 해당하는 댓글들(List<Comment>) 목록 가져오기 
+		List<Comment> commentList = commentMapper.selectCommentListByPostId(postId);
+		
 		//반복문 순회
 		//List<Comment> -> List<CommentView>
 		for (Comment comment : commentList) {
 			CommentView commentView = new CommentView();
 			
-			//댓글내용 담기
+			//댓글 내용 담기
 			commentView.setComment(comment);
 			
 			//댓글쓴이 내용 담기
-			UserEntity user = userBO.getUserEntityByLoginId(comment.getUserId());
+			UserEntity user = userBO.getUserEntityById(comment.getUserId());
 			commentView.setUser(user);
-			
 			
 			//리스트에 담는다
 			commentViewList.add(commentView);
 		}
-				
 		return commentViewList;
+	}
+	
 }

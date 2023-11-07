@@ -2,6 +2,7 @@ package com.sns.timeline.domain;
 
 import java.util.List;
 
+
 import com.sns.comment.domain.CommentView;
 import com.sns.post.entity.PostEntity;
 import com.sns.user.entity.UserEntity;
@@ -10,6 +11,7 @@ import lombok.Data;
 
 //View용 객체
 //글 1개와 mapping된다
+//카드뷰 하나 = 글 1개
 @Data
 public class CardView {
 

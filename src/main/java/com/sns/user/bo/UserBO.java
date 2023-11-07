@@ -12,9 +12,11 @@ public class UserBO {
 	@Autowired
 	private UserRepository userRepository;
 	
-	//댓글뿌리기
-	private UserEntity getUserEntityById(int userId) {
-		return userRepository.findById(userId).orElse(null);
+	//댓글 뿌릴 때 id로만 조회하는게 필요해서 만든 메소드
+	public UserEntity getUserEntityById(int userId) {
+		return userRepository.findById(userId).orElse(null); 
+		//내가 리턴하고싶은건 UserEntity인데 리턴 되고있는건 optional(null체크가 가능한 객체)라서
+		//타입이 미스매치라고 뜨기 때문에 잇으면 리턴하고 없으면 null로 리턴한다는 orElse(null)을 붙여준다
 	}
 	
 	//아이디 중복확인
