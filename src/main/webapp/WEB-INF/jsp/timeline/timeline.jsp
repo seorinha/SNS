@@ -47,14 +47,20 @@
 				
 				<%-- 좋아요 --%>
 				<div class="card-like m-3">
-					<a href="#" id="unfilledHeart" class="like-btn" data-post-id="${card.post.id}">
-						<img src="/img/heart-icon.png" width="18" height="18" alt="unfilled heart">
+				<%--빈하트가 나오는 경우: 1. 비로그인일때, 2.로그인 상태에서 좋아요를 누르지 않았을때 --%>
+				<c:if test="${card.filledLike == false}">
+					<a href="#" id="emptyHeart" class="like-btn" data-post-id="${card.post.id}">
+						<img src="/img/heart-icon.png" width="18" height="18" alt="empty heart">
 					</a>
+				</c:if>
 					
+				<%--채워진 하트: 로그인 이면서 좋아요를 눌렀을 때 --%>
+				<c:if test="${card.filledLike == true}">	
 					<a href="#" id="filledHeart" class="like-btn" data-post-id="${card.post.id}">
 						<img src="/img/filled-heart-icon.png" width="18" height="18" alt="filled heart">
 					</a>
-					좋아요 11개
+				</c:if>
+					좋아요 ${card.likeCount}개
 				</div>
 				
 				<%-- 글 --%>
