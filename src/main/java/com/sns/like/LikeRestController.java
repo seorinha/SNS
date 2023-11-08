@@ -43,7 +43,7 @@ public class LikeRestController {
 		}
 		
 		//로그인이 돼있으면 bo호출-> like 여부 체크 
-		likeBO.likeTobble(postId, userId);
+		likeBO.likeToggle(postId, userId);
 		
 		//응답값
 		result.put("code", 200);

@@ -47,12 +47,12 @@
 				
 				<%-- 좋아요 --%>
 				<div class="card-like m-3">
-					<a href="#" class="like-btn" data-post-id="${card.post.id}">
-						<img src="https://www.iconninja.com/files/214/518/441/heart-icon.png" width="18" height="18" alt="filled heart">
+					<a href="#" id="unfilledHeart" class="like-btn" data-post-id="${card.post.id}">
+						<img src="/img/heart-icon.png" width="18" height="18" alt="unfilled heart">
 					</a>
 					
-					<a href="#" class="like-btn" data-post-id="${card.post.id}">
-						<img src="https://www.iconninja.com/files/214/518/441/heart-icon.png" width="18" height="18" alt="filled heart">
+					<a href="#" id="filledHeart" class="like-btn" data-post-id="${card.post.id}">
+						<img src="/img/filled-heart-icon.png" width="18" height="18" alt="filled heart">
 					</a>
 					좋아요 11개
 				</div>
@@ -219,7 +219,7 @@ $(document).ready(function() {
 		e.preventDefault(); //a태그의 위로 올라가는 현상 방지
 		
 		let commentId = $(this).data("comment-id");
-		alert(commentId);
+		//alert(commentId);
 		
 		
 		$.ajax({
@@ -245,7 +245,7 @@ $(document).ready(function() {
 	
 
 	//좋아요 해제
-	$('.like-btn').on('click', function() {
+	$('.like-btn').on('click', function(e) {
 		e.preventDefault();
 		
 		let postId = $(this).data("post-id");

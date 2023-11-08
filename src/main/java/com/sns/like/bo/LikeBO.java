@@ -14,7 +14,7 @@ public class LikeBO {
 	//좋아요 누르기, 해제하기
 	//input:누가, 어떤 글에 
 	//output:x
-	public void likeTobble(int postId, int userId) {
+	public void likeToggle(int postId, int userId) {
 		//셀렉트 -> count(*)
 		if (likeMapper.selectLikeCountByPostIdUserId(postId, userId) > 0) {
 			//삭제
