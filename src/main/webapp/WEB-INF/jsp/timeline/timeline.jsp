@@ -50,14 +50,14 @@
 				<%--빈하트가 나오는 경우: 1. 비로그인일때, 2.로그인 상태에서 좋아요를 누르지 않았을때 --%>
 				<c:if test="${card.filledLike == false}">
 					<a href="#" id="emptyHeart" class="like-btn" data-post-id="${card.post.id}">
-						<img src="/img/heart-icon.png" width="18" height="18" alt="empty heart">
+						<img src="https://www.iconninja.com/files/214/518/441/heart-icon.png" width="18" height="18" alt="empty heart">
 					</a>
 				</c:if>
 					
 				<%--채워진 하트: 로그인 이면서 좋아요를 눌렀을 때 --%>
 				<c:if test="${card.filledLike == true}">	
 					<a href="#" id="filledHeart" class="like-btn" data-post-id="${card.post.id}">
-						<img src="/img/filled-heart-icon.png" width="18" height="18" alt="filled heart">
+						<img src="https://www.iconninja.com/files/527/809/128/heart-icon.png" width="18" height="18" alt="filled heart">
 					</a>
 				</c:if>
 					좋아요 ${card.likeCount}개
@@ -250,29 +250,29 @@ $(document).ready(function() {
 	});
 	
 
-	//좋아요 해제
+	//좋아요 누르기,해제
 	$('.like-btn').on('click', function(e) {
 		e.preventDefault();
 		
 		let postId = $(this).data("post-id");
 		
+		
 		$.ajax({
-			//request
-			type:"get" //get은 생략가능
-			, url:"/like/" + postId
-			//data를 추가할 필요 없음
+			// request
+			url: "/like/" + postId
 			
-			//response
+			// response
 			, success:function(data) {
 				if (data.code == 200) {
-					location.reload(true); //새로고침 -> timeline다시 가져옴 -> 하트 채워지거나 비워지거나
-				} else if (data.code == 500) { //비로그인 상태
-					alert("로그인을 해주세요");
+					location.reload(true); // 새로고침 => timeline 다시 가져옴 -> 하트 채워지거나 or 비워지거나
+				} else if (data.code == 500) {
+					// 비로그인 상태
+					alert(data.errorMessage);
+					location.href = "/user/sign-in-view"; // 로그인 페이지로 이동
 				}
 			}
-		
 			, error:function(request, status, error) {
-				alert("좋아요 누르기에 실패했습니다");
+				alert("좋아요 하는데 실패했습니다.");
 			}
 		});
 	});

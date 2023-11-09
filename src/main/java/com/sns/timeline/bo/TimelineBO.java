@@ -31,10 +31,10 @@ public class TimelineBO {
 	@Autowired
 	private LikeBO likeBO;
 	
-	//댓글 뿌리기
-	//input : userId()
+	//
+	//input : userId(비로그인/로그인 허용 null도 허용)
 	//output: List<cardView>
-	public List<CardView> generateCardViewList() { //화면용으로 가공할 때는 보통 generate 사용
+	public List<CardView> generateCardViewList(Integer userId) { //화면용으로 가공할 때는 보통 generate 사용
 		List<CardView> cardViewList = new ArrayList<>(); // [] 비어있는 리스트
 		
 		//글 목록을 가져온다 List<PostEntity>
