@@ -112,7 +112,7 @@
   <%--modal-sm: 작은 모달 , modal-dialog-centered: 수직기준 가운데정렬--%>
   <div class="modal-dialog modal-dialog-centered modal-sm">
     <div class="modal-content text-center">
-      <div class="py-3 border=bottom">
+      <div class="py-3 border-bottom">
       	<a href="#" id="deletePostLink">삭제하기</a>
       </div>
       <div class="py-3">
