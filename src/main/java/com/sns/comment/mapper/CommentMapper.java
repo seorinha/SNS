@@ -23,4 +23,6 @@ public interface CommentMapper {
 	//댓글 삭제하기
 	public void deleteCommentById(int id); 
 	
+	//글 삭제시 댓글삭제
+	public void deleteCommentsByPostId(int postId);
 }

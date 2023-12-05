@@ -65,5 +65,10 @@ public class CommentBO {
 		commentMapper.deleteCommentById(id);
 	}
 	
+	//글 삭제시 댓글삭제
+	public void deleteCommentsByPostId(int postId) {
+		commentMapper.deleteCommentsByPostId(postId);
+	}
+	
 	
 }

@@ -109,17 +109,17 @@
 
 <%--모달 창 --%>
 <div class="modal fade" id="modal">
-  <%--modal-sm: 작은 모달 , modal-dialog-centered: 수직기준 가운데정렬--%>
-  <div class="modal-dialog modal-dialog-centered modal-sm">
-    <div class="modal-content text-center">
-      <div class="py-3 border-bottom">
-      	<a href="#" id="deletePostLink">삭제하기</a>
-      </div>
-      <div class="py-3">
-      	<a href="#" data-dismiss="modal">취소하기</a>
-      </div>
-    </div>
-  </div>
+	<%-- modal-sm:작은 모달, modal-dialog-centered:수직 기준 가운데 --%>
+	<div class="modal-dialog modal-dialog-centered modal-sm">
+		<div class="modal-content text-center">
+      		<div class="py-3 border-bottom">
+      			<a href="#" id="deletePostLink">삭제하기</a>
+      		</div>
+      		<div class="py-3">
+      			<a href="#" data-dismiss="modal">취소하기</a>
+      		</div>
+		</div>
+	</div>
 </div>
 
 
@@ -298,44 +298,40 @@ $(document).ready(function() {
 	
 	
 	
-	//글 삭제(... 더보기 버튼 클릭) => 모달 띄우기 => 모달에 글번호 세팅
-	$(".more-btn").on('click', function(e) {
-		e.preventDefault(); //a태그 올라가는 현상 방지
+	// 글 삭제(... 더보기 버튼 클릭) => 모달 띄우기 => 모달에 글번호 세팅
+	$(".more-btn").on("click", function(e) {
+		e.preventDefault(); // a 태그 올라가는 현상 방지
 		
-		let postId = $(this).data("post-id"); // ...버튼에 넣어둔 글 번호 getting
+		let postId = $(this).data("post-id"); // ... 버튼에 넣어둔 글 번호 getting
 		//alert(postId);
 		
-		//1개인 모달 태그에 재활용, data-post-id를 심어줌
-		$("#modal").data("post-id", postId); //모달 태그에 setting
+		// 1개인 모달 태그에 재활용. data-post-id를 심어줌
+		$("#modal").data("post-id", postId); // 모달 태그에 setting
 	});
 	
-	//모달 안에 있는 삭제하기 클릭 -> 진짜 삭제
-	$("#modal #deletePostLink").on('click', function(e) {
+	// 모달 안에 있는 삭제하기 클릭 => 진짜 삭제
+	$("#modal #deletePostLink").on("click", function(e) {
 		e.preventDefault();
 		
-		let postId = $("#modal").data("post-id"); //getting
-		//alert("postId");
+		let postId = $("#modal").data("post-id"); // getting
+		//alert(postId);
 		
 		
 		
 		//ajax로 글삭제 요청하기 만들기 
 		$.ajax({
-			//request
 			type:"delete"
 			, url:"/post/delete"
-			, data:{"postId":postId}
-		
-			//response
-			, success:function(data) {
+			, data: {"postId":postId}
+			, success: function(data) {
 				if (data.code == 200) {
-					alert("글이 삭제되었습니다");
 					location.reload(true);
 				} else {
 					alert(data.errorMessage);
 				}
 			}
-			, error:function(request, status, error) {
-				alert("글 삭제에 실패했습니다.");
+			, error: function(e) {
+				alert("삭제하는데 실패했습니다. 관리자에게 문의해주세요.");
 			}
 		});
 		

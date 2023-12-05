@@ -13,9 +13,7 @@ public interface PostRepository extends JpaRepository<PostEntity, Integer> {
 	//타임라인 글 목록 뿌리기
 	public List<PostEntity> findAllByOrderByIdDesc();
 	
-	//글 삭제하기
-	public 
-	
+
 	
 	
 }

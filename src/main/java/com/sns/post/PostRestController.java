@@ -58,23 +58,30 @@ public class PostRestController {
 		}
 	
 	
-	//글 삭제하기
+	/**
+	 * 글 삭제 API
+	 * @param postId
+	 * @param session
+	 * @return
+	 */
 	@DeleteMapping("/delete")
 	public Map<String, Object> delete(
 			@RequestParam("postId") int postId,
 			HttpSession session) {
-		
-		//로그인 여부 확인
-		int userId = (int)session.getAttribute("userId");
-		
-		//삭제
-		postBO.deletePostByPostId(postId, userId);
-		
-		//응답값
+
 		Map<String, Object> result = new HashMap<>();
+
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userId == null) {
+			result.put("code", 500);
+			result.put("errorMessage", "로그인을 다시 해주세요.");
+			return result;
+		}
+
+		postBO.deletePostByPostIdUserId(postId, userId);
 		result.put("code", 200);
 		result.put("result", "성공");
-		
+
 		return result;
 	}
 	
